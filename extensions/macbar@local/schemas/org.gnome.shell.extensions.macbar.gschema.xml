@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.macbar" path="/org/gnome/shell/extensions/macbar/">
+    <key name="mode" type="s">
+      <default>'dark'</default>
+      <summary>Top bar mode: light, dark or transparent</summary>
+    </key>
+    <key name="text-color" type="s">
+      <default>'#ffffff'</default>
+      <summary>Text and icon colour used in transparent mode</summary>
+    </key>
+    <key name="autohide" type="s">
+      <default>'off'</default>
+      <summary>Auto-hide the top bar: off, smart (a window covers it) or always</summary>
+    </key>
+  </schema>
+</schemalist>

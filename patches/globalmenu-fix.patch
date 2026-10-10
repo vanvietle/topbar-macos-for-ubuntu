@@ -1,0 +1,34 @@
+--- a/extension.js
++++ b/extension.js
+@@ -38,7 +38,13 @@
+             }
+         });
+ 
++        // Local fix: opening a menu moves focus to the popup (focus-window becomes null),
++        // which used to rebuild and destroy the menu being clicked. Ignore null/unchanged focus.
+         global.display.connectObject('notify::focus-window', () => {
++            const win = global.display.get_focus_window();
++            if (!win || win === this._lastFocusWindow)
++                return;
++            this._lastFocusWindow = win;
+             this._syncMenuVisibility();
+         }, this);
+ 
+--- a/menuManager.js
++++ b/menuManager.js
+@@ -357,7 +357,14 @@
+             menuItem.setSensitive(false);
+           } else if (item.action) {
+             menuItem.connect("activate", () => {
+-              this._executeNativeAction(item.action);
++              // Local fix: run after the menu has closed and the app has its focus back,
++              // otherwise synthetic key events go to the shell's popup grab instead of the app.
++              const id = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, () => {
++                this._timeoutIds = this._timeoutIds.filter(t => t !== id);
++                this._executeNativeAction(item.action);
++                return GLib.SOURCE_REMOVE;
++              });
++              this._timeoutIds.push(id);
+             });
+           }
+           parentMenu.addMenuItem(menuItem);

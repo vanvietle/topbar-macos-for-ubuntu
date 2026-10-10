@@ -1,0 +1,48 @@
+.macbar-item {
+    padding: 0 7px;
+    spacing: 6px;
+}
+
+.macbar-clickable {
+    min-height: 26px;
+}
+
+.macbar-flag {
+    padding: 0 12px 0 2px;
+}
+
+.macbar-cc {
+    padding: 0 3px;
+}
+
+/* needs the same weight as the theme's `#panel .panel-button` rule or the theme wins */
+#panel .panel-button.macbar-modebtn {
+    -natural-hpadding: 10px;
+    -minimum-hpadding: 10px;
+}
+
+/* gap compensation: the stock "vi" and clock buttons bring their own padding, so trim ours next to them */
+.macbar-batt {
+    padding: 0 12px;
+}
+
+#panel .panel-button.clock-display {
+    -natural-hpadding: 0px;
+    -minimum-hpadding: 0px;
+}
+
+
+/* one text size for the whole bar: global menu, window title, clock, battery % and the input-source label */
+.macbar-label {
+    font-size: 1.1em;
+}
+
+#panel .panel-button StLabel {
+    font-size: 1.1em;
+}
+
+/* the app name on the left reads as bold, like the app name in the macOS menu bar */
+#panel .panel-button .macbar-bold,
+#panel .macbar-bold {
+    font-weight: 800;
+}

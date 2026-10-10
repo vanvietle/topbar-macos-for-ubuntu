@@ -1,0 +1,9 @@
+{
+  "uuid": "macbar@local",
+  "name": "MacBar",
+  "description": "Tách icon pin và wifi khỏi cụm quick settings thành các nút riêng trên top bar (kiểu macOS). Click vào vẫn mở menu quick settings.",
+  "shell-version": [
+    "46"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.macbar"
+}

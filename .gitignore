@@ -1,0 +1,6 @@
+# compiled GSettings schemas are rebuilt by scripts/install.sh
+gschemas.compiled
+# local backups made while experimenting
+*.dconf.bak
+*.orig
+*.rej
