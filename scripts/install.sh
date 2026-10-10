@@ -17,13 +17,22 @@ say() { printf '\033[1m==> %s\033[0m\n' "$*"; }
 run() { if (( DRY )); then printf '    [dry-run] %s\n' "$*"; else "$@"; fi; }
 
 say "Checking the system"
-for tool in gnome-shell gnome-extensions dconf gsettings glib-compile-schemas patch python3; do
-    command -v "$tool" >/dev/null || { echo "missing: $tool"; exit 1; }
+command -v gnome-shell >/dev/null || { echo "GNOME Shell was not found; this needs Ubuntu with GNOME"; exit 1; }
+# tool -> Ubuntu package
+declare -A PKG=([gnome-extensions]=gnome-shell [dconf]=dconf-cli [gsettings]=libglib2.0-bin
+                [glib-compile-schemas]=libglib2.0-bin [patch]=patch [python3]=python3 [pipx]=pipx [curl]=curl)
+missing=()
+for tool in "${!PKG[@]}"; do
+    command -v "$tool" >/dev/null || missing+=("${PKG[$tool]}")
 done
+if (( ${#missing[@]} )); then
+    mapfile -t missing < <(printf '%s\n' "${missing[@]}" | sort -u)
+    say "Installing missing packages: ${missing[*]} (asks for your password)"
+    run sudo apt-get install -y "${missing[@]}"
+fi
 shell_major="$(gnome-shell --version | grep -oE '[0-9]+' | head -1)"
 [[ "$shell_major" == "46" ]] || echo "warning: written and tested on GNOME Shell 46 (Ubuntu 24.04); you have $shell_major"
 [[ "${XDG_SESSION_TYPE:-}" == "x11" ]] || echo "warning: tested on an X11 session; on Wayland you must log out and in instead of restarting the shell"
-command -v pipx >/dev/null || { echo "missing: pipx (sudo apt install pipx)"; exit 1; }
 
 say "Backing up the current desktop settings"
 backup="$HOME/gnome-backup-$(date +%F-%H%M%S).dconf"
